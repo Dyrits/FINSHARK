@@ -1,0 +1,72 @@
+﻿services:
+  api:
+    image: dyrits/finshark-api:latest
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile.development
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:5018
+    develop:
+      watch:
+        - action: sync
+          path: ./api
+          target: /app
+          ignore:
+            - ./appsettings.Development.json
+            - ./Program.cs
+            - ./Dockerfile.development
+        - action: sync+restart
+          path: ./api/appsettings.Development.json
+          target: /app/appsettings.Development.json
+        - action: sync+restart
+          path: ./api/Program.cs
+          target: /app/Program.cs
+        - action: rebuild
+          path: ./api/api.csproj
+        - action: rebuild
+          path: ./api/Dockerfile.development
+    ports:
+      - "5018:5018"
+    depends_on:
+      - database
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=FinShark_DROWSSAP_@S
+      - DB_NAME=FinShark
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+  frontend:
+    image: dyrits/finshark-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile.development
+    env_file:
+      - ./frontend/.env
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/src
+          target: /app/src
+        - action: sync
+          path: ./public
+          target: /app/public
+        - action: sync+restart
+          path: ./frontend
+          target: /app
+          ignore:
+            - ./node_modules
+            - ./src
+            - ./public
+            - ./package.json
+        - action: rebuild
+          path: ./frontend/package.json
+    ports:
+      - "3000:3000"
+
+volumes:
+  sql-data:

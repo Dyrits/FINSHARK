@@ -1,78 +1,62 @@
-using api.Data;
 using api.DTOs.Stock;
-using api.Mappers;
-using api.Models;
+using api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace api;
 
 [Route("api/stocks")]
 public class StockController : Controller
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IStockService _service;
 
-    public StockController(ApplicationDbContext context)
+    public StockController(IStockService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var stocks = await _context.Stocks.ToListAsync();
-        return Ok(stocks.Select(stock => stock.ToStockDTO()));;
+        var stocks = await _service.GetAll();
+        return Ok(stocks);
     }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
-        var stock = await _context.Stocks.FindAsync(id);
-        if (stock == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(stock.ToStockDTO());
+        var stock = await _service.GetById(id);
+        return stock == null ? NotFound() : Ok(stock);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] NewStockDTO data)
+    public async Task<IActionResult> Create([FromBody] BaseStockDTO data)
     {
-        var stock = data.ToStock();
-       await  _context.Stocks.AddAsync(stock);
-        await _context.SaveChangesAsync();
-
-        // Returns the new stock using the GetById method, passing the new stock's ID.
-        return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock.ToStockDTO());
+        var stock = await _service.Create(data);
+        return CreatedAtAction(nameof(GetById), new { id = stock.Id }, stock);
     }
-    
+
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdatedStockDTO data)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] BaseStockDTO data)
     {
-        var stock = await _context.Stocks.FindAsync(id);
-        if (stock == null)
-        {
-            return NotFound();
-        }
-
-        stock.UpdateFrom(data);
-
-        await _context.SaveChangesAsync();
-        return Ok(stock.ToStockDTO());
+        var stock = await _service.Update(id, data);
+        return stock == null ? NotFound() : Ok(stock);
     }
-    
+
+    [HttpPatch("{id:int}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PartialStockDTO data)
+    {
+        var stock = await _service.Update(id, data);
+        return stock == null ? NotFound() : Ok(stock);
+    }
+
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var stock = await _context.Stocks.FindAsync(id);
-        if (stock == null)
+        var deleted = await _service.Delete(id);
+        if (!deleted)
         {
             return NotFound();
         }
-
-        _context.Stocks.Remove(stock);
-        await _context.SaveChangesAsync();
         return NoContent();
     }
 }

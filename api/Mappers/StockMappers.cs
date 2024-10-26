@@ -32,13 +32,13 @@ public static class StockMappers
         };
     }
 
-    public static void UpdateFrom(this Stock stock, BaseStockDTO data)
+    public static void UpdateFrom(this Stock stock, PartialStockDTO data)
     {
-        stock.Symbol = data.Symbol;
-        stock.CompanyName = data.CompanyName;
-        stock.Price = data.Price;
-        stock.LastDividend = data.LastDividend;
-        stock.Industry = data.Industry;
-        stock.MarketCap = data.MarketCap;
+        stock.Symbol = data.Symbol ?? stock.Symbol;
+        stock.CompanyName = data.CompanyName ?? stock.CompanyName;
+        stock.Price = data.Price ?? stock.Price;
+        stock.LastDividend = data.LastDividend ?? stock.LastDividend;
+        stock.Industry = data.Industry ?? stock.Industry;
+        stock.MarketCap = data.MarketCap ?? stock.MarketCap;
     }
 }

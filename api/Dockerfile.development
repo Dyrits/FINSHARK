@@ -15,5 +15,8 @@ COPY ./ ./
 # Expose the port the application will run on
 EXPOSE 5018
 
-# Set the entry point for the application
+# Set the environment variable to always restart on rude edits
+ENV DOTNET_WATCH_RESTART_ON_RUDE_EDIT=true
+
+# Set the command to run the application
 CMD ["dotnet", "watch", "run", "--project" , "api.csproj",  "--urls", "http://*:5018"]
