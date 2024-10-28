@@ -13,17 +13,25 @@ public static class CommentMappers
             Title = comment.Title,
             Content = comment.Content,
             CreatedAt = comment.CreatedAt,
+            StockId = comment.StockId
         };
     }
 
-    public static Comment ToComment(this BaseCommentDTO comment)
+    /**
+     * <summary>
+     * Maps a comment DTO to a comment model.
+     * </summary>
+     * <param name="comment">The comment DTO (BaseCommentDTO).</param>
+     * <params name="id">The stock id (int).</params>
+     * <returns>The comment model (Comment).</returns>
+    */
+    public static Comment ToComment(this BaseCommentDTO comment, int id)
     {
         return new Comment
         {
-            Id = comment.Id,
             Title = comment.Title,
             Content = comment.Content,
-            CreatedAt = comment.CreatedAt,
+            StockId = id
         };
     }
 
@@ -31,6 +39,5 @@ public static class CommentMappers
     {
         comment.Title = data.Title ?? comment.Title;
         comment.Content = data.Content ?? comment.Content;
-        comment.CreatedAt = data.CreatedAt ?? comment.CreatedAt;
     }
 }

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using api.Data;
 using api.Interfaces;
 using api.Models;
@@ -24,9 +25,9 @@ public class CommentRepository: ICommentRepository
         return await _context.Comments.FindAsync(id);
     }
     
-    public async Task<Comment> Create(Comment data)
+    public async Task<Comment> Create(Comment comment)
     {
-        var comment = (await _context.Comments.AddAsync(data)).Entity;
+        await _context.Comments.AddAsync(comment);
         await _context.SaveChangesAsync();
         return comment;
     }

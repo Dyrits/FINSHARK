@@ -1,27 +1,40 @@
 using api.DTOs.Comment;
 using api.Interfaces;
 using api.Mappers;
+using Newtonsoft.Json;
 
 namespace api.Services;
 
 public class CommentService : ICommentService
 {
-    private readonly ICommentRepository _repository;
+    private readonly ICommentRepository _comments;
+    private readonly IStockRepository _stocks;
     
-    public CommentService(ICommentRepository repository)
+    public CommentService(ICommentRepository comments, IStockRepository stocks)
     {
-        _repository = repository;
+        _comments = comments;
+        _stocks = stocks;
     }
     
     public async Task<List<IdentifiedCommentDTO>> GetAll()
     {
-        var comments = await _repository.GetAll();
+        var comments = await _comments.GetAll();
         return comments.Select(comment => comment.ToCommentDTO()).ToList();
     }
     
     public async Task<IdentifiedCommentDTO?> GetById(int id)
     {
-        var comment = await _repository.GetById(id);
+        var comment = await _comments.GetById(id);
         return comment?.ToCommentDTO();
+    }
+
+    public async Task<IdentifiedCommentDTO> Create(int id, BaseCommentDTO data)
+    {
+        if (!await _stocks.Exists(id))
+        {
+            throw new ArgumentException($"Stock with id {id} does not exist.");
+        }
+        var comment = await _comments.Create(data.ToComment(id));
+        return comment.ToCommentDTO();
     }
 }

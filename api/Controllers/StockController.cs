@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api;
 
-[Route("api/stocks")]
+[Route("/api/stocks")]
 public class StockController : Controller
 {
     private readonly IStockService _service;

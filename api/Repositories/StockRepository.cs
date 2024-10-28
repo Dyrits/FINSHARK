@@ -15,14 +15,16 @@ public class StockRepository: IStockRepository
         _context = context;
     }
     
+    public async Task<bool> Exists(int id) => await _context.Stocks.AnyAsync(stock => stock.Id == id);
+    
     public async Task<List<Stock>> GetAll()
     {
-       return await _context.Stocks.ToListAsync();
+       return await _context.Stocks.Include(stock => stock.Comments).ToListAsync();
     }
 
     public async Task<Stock?> GetById(int id)
     {
-       return await _context.Stocks.FindAsync(id);
+       return await _context.Stocks.Include(stock => stock.Comments).FirstOrDefaultAsync(stock => stock.Id == id);
     }
 
     public async Task<Stock> Create(Stock stock)
