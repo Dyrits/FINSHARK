@@ -37,4 +37,27 @@ public class CommentService : ICommentService
         var comment = await _comments.Create(data.ToComment(id));
         return comment.ToCommentDTO();
     }
+    
+    public async Task<IdentifiedCommentDTO?> Update(int id, PartialCommentDTO data)
+    {
+        var comment = await _comments.GetById(id);
+        if (comment == null)
+        {
+            return null;
+        }
+        comment.UpdateFrom(data);
+        comment = await _comments.Update(comment);
+        return comment.ToCommentDTO();
+    }
+    
+    public async Task<bool> Delete(int id)
+    {
+        var comment = await _comments.GetById(id);
+        if (comment == null)
+        {
+            return false;
+        }
+        await _comments.Delete(comment);
+        return true;
+    }
 }

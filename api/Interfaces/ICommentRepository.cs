@@ -15,4 +15,6 @@ public interface ICommentRepository
      * <returns>The created comment (Comment).</returns>
     */
     Task<Comment> Create(Comment comment);
+    Task<Comment> Update(Comment comment);
+    Task Delete(Comment comment);
 }

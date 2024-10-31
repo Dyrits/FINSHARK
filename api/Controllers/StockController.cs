@@ -52,11 +52,7 @@ public class StockController : Controller
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var deleted = await _service.Delete(id);
-        if (!deleted)
-        {
-            return NotFound();
-        }
-        return NoContent();
+        var success = await _service.Delete(id);
+        return success ? NoContent() : NotFound();
     }
 }

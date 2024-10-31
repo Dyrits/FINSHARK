@@ -41,4 +41,25 @@ public class CommentController : Controller
             return BadRequest(exception.Message);
         }
     }
+    
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] BaseCommentDTO data)
+    {
+        var comment = await _service.Update(id, data);
+        return comment == null ? NotFound() : Ok(comment);
+    }
+    
+    [HttpPatch("{id:int}")]
+    public async Task<IActionResult> Patch([FromRoute] int id, [FromBody] PartialCommentDTO data)
+    {
+        var comment = await _service.Update(id, data);
+        return comment == null ? NotFound() : Ok(comment);
+    }
+    
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        var success = await _service.Delete(id);
+        return success ? NoContent() : NotFound();
+    }
 }

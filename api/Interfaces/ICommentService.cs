@@ -15,4 +15,6 @@ public interface ICommentService
      * <returns>The created comment DTO (IdentifiedCommentDTO).</returns>
      */
     Task<IdentifiedCommentDTO> Create(int id, BaseCommentDTO data);
+    Task<IdentifiedCommentDTO?> Update(int id, PartialCommentDTO data);
+    Task<bool> Delete(int id);
 }
