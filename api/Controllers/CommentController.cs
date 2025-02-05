@@ -17,6 +17,10 @@ public class CommentController : Controller
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         var comments = await _service.GetAll();
         return Ok(comments);
     }
@@ -24,6 +28,10 @@ public class CommentController : Controller
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         var comment = await _service.GetById(id);
         return comment == null ? NotFound() : Ok(comment);
     }
@@ -31,6 +39,10 @@ public class CommentController : Controller
     [HttpPost("/api/stocks/{id:int}/comments")]
     public async Task<IActionResult> Create([FromRoute] int id, [FromBody] BaseCommentDTO data)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         try
         {
             var comment = await _service.Create(id, data);
@@ -45,6 +57,10 @@ public class CommentController : Controller
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] BaseCommentDTO data)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         var comment = await _service.Update(id, data);
         return comment == null ? NotFound() : Ok(comment);
     }
@@ -52,6 +68,10 @@ public class CommentController : Controller
     [HttpPatch("{id:int}")]
     public async Task<IActionResult> Patch([FromRoute] int id, [FromBody] PartialCommentDTO data)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         var comment = await _service.Update(id, data);
         return comment == null ? NotFound() : Ok(comment);
     }
@@ -59,6 +79,10 @@ public class CommentController : Controller
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         var success = await _service.Delete(id);
         return success ? NoContent() : NotFound();
     }

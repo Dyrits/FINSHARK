@@ -8,6 +8,9 @@ WORKDIR /app
 COPY ./api.csproj ./api.csproj
 
 RUN dotnet restore
+RUN dotnet tool install --global dotnet-ef
+
+ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Copy the rest of the application code
 COPY ./ ./
