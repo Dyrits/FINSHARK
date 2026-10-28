@@ -29,6 +29,8 @@ Build and launch the stack (API, SQL Server database, frontend):
 docker compose -f compose.development.yml up --build
 ```
 
+Copy `.env.example` to `.env` at the repository root and set `DB_PASSWORD` (the local SQL Server password; compose refuses to start without it).
+
 The frontend needs a Financial Modeling Prep API key: copy `frontend/.env.example` to `frontend/.env` and set `VITE_API_KEY`.
 
 Entity Framework commands can be run against the containerized API:
@@ -53,6 +55,7 @@ This repository is archived and read-only. Last maintenance update, October 2026
 - Frontend `npm audit`: 3 moderate findings remain (react-router open redirect, fixed only in v7, a major upgrade not done; uuid 9, not reachable by this app).
 - The only frontend test (`App.test.tsx`) is the unmodified starter test and fails, because the component needs a router.
 - Not run end to end: the full Docker Compose stack and logged-in API calls were not exercised after the update.
+- A SQL Server `sa` password for the local Docker database was also committed in early history and was in the configuration files until this update. Treat it as exposed and do not reuse it.
 - An API key was committed to early history of this repository. It was removed from the current files but remains in git history, so treat it as exposed.
 
 ## License
