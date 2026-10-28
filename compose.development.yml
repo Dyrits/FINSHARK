@@ -7,6 +7,7 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:5018
+      - ConnectionStrings__DefaultConnection=Server=database,1433;Database=FinShark;Initial Catalog=FinShark;User id=sa;Password=${DB_PASSWORD:?set DB_PASSWORD in .env (see .env.example)};Encrypt=False;TrustServerCertificate=True
     develop:
       watch:
         - action: sync
@@ -34,7 +35,7 @@
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=FinShark_DROWSSAP_@S
+      - SA_PASSWORD=${DB_PASSWORD:?set DB_PASSWORD in .env (see .env.example)}
       - DB_NAME=FinShark
     ports:
       - "1433:1433"
