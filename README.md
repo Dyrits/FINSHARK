@@ -12,7 +12,7 @@ A containerized full-stack project centered on an ASP.NET 8 REST API (stocks and
 
 - ASP.NET 8 + Entity Framework Core (API)
 - SQL Server (database)
-- React (frontend, in `frontend/`)
+- React + Vite (frontend, in `frontend/`)
 - Docker Compose
 
 ## Getting Started
@@ -29,6 +29,8 @@ Build and launch the stack (API, SQL Server database, frontend):
 docker compose -f compose.development.yml up --build
 ```
 
+The frontend needs a Financial Modeling Prep API key: copy `frontend/.env.example` to `frontend/.env` and set `VITE_API_KEY`.
+
 Entity Framework commands can be run against the containerized API:
 
 ```sh
@@ -42,6 +44,16 @@ make ef <command>   # e.g. make ef migrations list
 | `api/` | ASP.NET 8 API (controllers, DTOs, EF Core data, services) |
 | `frontend/` | React client |
 | `compose.development.yml` | api, database (SQL Server) and frontend services |
+
+## Known limits (archived, October 2026)
+
+This repository is archived and read-only. Last maintenance update, October 2026:
+
+- Dependencies updated within supported ranges (ASP.NET Core / EF Core 8.0.33; frontend moved from Create React App to Vite).
+- Frontend `npm audit`: 3 moderate findings remain (react-router open redirect, fixed only in v7, a major upgrade not done; uuid 9, not reachable by this app).
+- The only frontend test (`App.test.tsx`) is the unmodified starter test and fails, because the component needs a router.
+- Not run end to end: the full Docker Compose stack and logged-in API calls were not exercised after the update.
+- An API key was committed to early history of this repository. It was removed from the current files but remains in git history, so treat it as exposed.
 
 ## License
 
