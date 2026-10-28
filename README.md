@@ -2,6 +2,8 @@
 
 A back-end refresher project using ASP.NET 8 with Entity Framework: a simple REST API for stocks and comments, with a React frontend.
 
+**Status: abandoned - development stopped before the project was finished.**
+
 ## About The Project
 
 A containerized full-stack project centered on an ASP.NET 8 REST API (stocks and comments) backed by SQL Server through Entity Framework Core, plus a React frontend.
